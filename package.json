@@ -1,0 +1,32 @@
+{
+  "name": "plasmidjs",
+  "version": "1.0.0",
+  "description": "Giving you the power to control which functions can be called on an object.",
+  "main": "plasmid.js",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "should": "^7.0.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://www.github.com/theideasmith/plasmid"
+  },
+  "keywords": [
+    "control",
+    "induce",
+    "switch",
+    "on",
+    "off",
+    "plasmid",
+    "plasmidjs",
+    "repress",
+    "function",
+    "conduitjs"
+  ],
+  "author": "Akiva Lipshitz <aclscientist@gmail.com> (http://www.github.com/theideasmith)",
+  "license": "MIT"
+}
