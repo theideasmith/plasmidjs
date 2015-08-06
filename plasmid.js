@@ -97,7 +97,7 @@
 
         _plasmid.repress = function(){
             args = Array.prototype.slice.call(arguments,0);
-            induce.apply(this,args);
+            repress.apply(this,args);
             return _plasmid;
         };
 
