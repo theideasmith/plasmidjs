@@ -94,19 +94,19 @@ Hopefully you're impressed.
 
 ## Docs
 
-+ `var new_obj = plasmid.Promote( old_obj[,options])`
-+ `new_obj.induce( method )`
-+ `new_obj.repress( method )`
-+ `new_obj.fail( failure_func )`
-+ `new_obj.all( state )`
-+ `new_obj.only( method, ... `)
-+ `new_obj.except( method, ... )`
-+ `new_obj.induced()`
-+ `new_obj.repressed()`
++ `var obj = plasmid.Promote( old_obj[,options])`
++ `obj.induce( method )`
++ `obj.repress( method )`
++ `obj.fail( failure_func )`
++ `obj.all( state )`
++ `obj.only( method, ... `)
++ `obj.except( method, ... )`
++ `obj.induced()`
++ `obj.repressed()`
 
-### var new_obj = plasmid.Promote( old_obj[,options])
+### var obj = plasmid.Promote( old_obj[,options])
 
-Creates a new plasmid that wraps `new_obj`. Note: creating a new plasmid will not modify the original object. Instead, the library creates a new object with the plasmid instance functions as well as the wrapped object's own functions, that when called execute with the `this` context of the wrapped object.
+Creates a new plasmid that wraps `obj`. Note: creating a new plasmid will not modify the original object. Instead, the library creates a new object with the plasmid instance functions as well as the wrapped object's own functions, that when called execute with the `this` context of the wrapped object.
 
 `old_obj`: the object to wrap
 `options`: an optional options object with the following (all optional) fields:
@@ -119,33 +119,33 @@ Creates a new plasmid that wraps `new_obj`. Note: creating a new plasmid will no
 `options.exposed`: which of the passed objetc's method to wrap. Defaults to every method of the passed object.
 `options.default`: starting state of the wrapped methods: either induced(`true`) or repressed(`false`). Defaults to true.
 
-### new_obj.induce( method, ... )
+### obj.induce( method, ... )
 
 Turn passed methods on
 
-### new_obj.repress( method, ... )
+### obj.repress( method, ... )
 
 Turn passed methods off
 
-### new_obj.fail( failure_func )
+### obj.fail( failure_func )
 
-### new_obj.all( true | false )
+### obj.all( true | false )
 Set the state of all methods
 `true`: on
 `false`: off
 
-### new_obj.only( method, ... )
+### obj.only( method, ... )
 
 Induce only the methods passed.
 
-### new_obj.except( method, ... )
+### obj.except( method, ... )
 
 Turn every method on except for the passed methods
 
-### new_obj.induced()
+### obj.induced()
 
 Returns an array of induced methods
 
-### new_obj.repressed()
+### obj.repressed()
 
 Returns an array of repressed methods
