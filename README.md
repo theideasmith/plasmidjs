@@ -4,8 +4,6 @@ Plasmidjs allows you to treat an object as a cell and each of its methods as gen
 
 This is the child of synthetic biology and nodejs and was inspired by the author's experience at Cooper Union's Summer STEM iGem track as well as by [conduitjs](https://github.com/ifandelse/ConduitJS).
 
-[TOC]
-
 ## Background
 
 Synthetic biology is defined as:
@@ -136,6 +134,16 @@ Turn passed methods on
 Turn passed methods off
 
 ### obj.fail( failure_func )
+
+Pass a failure function to be called when a method that is switched off is called. 
+
+```javascript
+cell.fail( function(method_name, err){
+   /*----( Your code here )----*/ 
+});
+
+```
+
 
 ### obj.all( true | false )
 Set the state of all methods
