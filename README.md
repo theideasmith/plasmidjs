@@ -29,7 +29,13 @@ var organism = {
         return this.height;
     },
 
-    ideas: ["never let your schooling interfere with your eduction", "you dont get what you don't ask for", "be persistent", "take advantage of the fact you exist","automate things"],
+    ideas: [
+        "never let your schooling interfere with your eduction", 
+        "you dont get what you don't ask for", 
+        "be persistent", 
+        "take advantage of the fact you exist",
+        "automate things"
+    ],
     think: function(){
         return this.ideas.pop() || "I'm all out of ideas";
     },
