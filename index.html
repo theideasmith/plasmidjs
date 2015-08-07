@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Plasmidjs by theideasmith</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Plasmidjs</h1>
+      <h2 class="project-tagline">Plasmidjs allows you to treat an object as cell and each of its methods as genes; allowing you to control which methods/genes are switched on,</h2>
+      <a href="https://github.com/theideasmith/plasmidjs" class="btn">View on GitHub</a>
+      <a href="https://github.com/theideasmith/plasmidjs/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/theideasmith/plasmidjs/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="plasmidjs" class="anchor" href="#plasmidjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plasmidjs</h1>
+
+<p>Plasmidjs allows you to treat an object as a cell and each of its methods as genes allowing you to control which methods/genes are switched on, and what happens if an <em>switched-off</em> method is called.</p>
+
+<p>This is the child of synthetic biology and nodejs and was inspired by the author's experience at Cooper Union's Summer STEM iGem track as well as by <a href="https://github.com/ifandelse/ConduitJS">conduitjs</a>.</p>
+
+<h2>
+<a id="background" class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background</h2>
+
+<p>Synthetic biology is defined as:</p>
+
+<blockquote>
+<p>an interdisciplinary branch of biology, combining disciplines such as biotechnology, evolutionary biology, molecular biology, systems biology, biophysics, computer engineering, and is in many ways related to genetic engineering.</p>
+</blockquote>
+
+<p>Synthetic biologists study the construction of new biological mechanisms and ways to optimize their design and development. More specifically, synthetic biologists can design custom DNA and insert it into a cell to engineer organisms to their liking and solve many of the world's problems.</p>
+
+<p>Usually, the type of DNA used is a plasmid – hence the name <em>Plasmidjs</em> . After DNA insertion, the cell begins to express whichever functions are encoded by the genes in this DNA. Sometimes, it is necessary that only certain genes be activated at a time. This feat is accomplished by the use of a special part of DNA called a promoter which can switch genes on and off.</p>
+
+<p>Very simply, the promoter is either induced or repressed. If it is repressed, the gene it controls is not expressed. If it is induced, the gene it controls is expressed.</p>
+
+<h2>
+<a id="so-what" class="anchor" href="#so-what" aria-hidden="true"><span class="octicon octicon-link"></span></a>So what?</h2>
+
+<p>Concepts from synthetic biology provide the perfect metaphor for a javascript library that enables you to switch on and off object functions.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> plasmid <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>plasmidjs<span class="pl-pds">'</span></span>)
+
+<span class="pl-k">var</span> organism <span class="pl-k">=</span> {
+    height<span class="pl-k">:</span> <span class="pl-c1">50</span>,
+    <span class="pl-en">grow</span><span class="pl-k">:</span> <span class="pl-k">function</span>(){
+        <span class="pl-v">this</span>.<span class="pl-c1">height</span><span class="pl-k">+=</span><span class="pl-c1">3</span>
+        <span class="pl-k">return</span> <span class="pl-v">this</span>.<span class="pl-c1">height</span>
+    },
+
+    ideas<span class="pl-k">:</span> [
+        <span class="pl-s"><span class="pl-pds">"</span>never let your schooling interfere with your eduction<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>you dont get what you don't ask for<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>be persistent<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>take advantage of the fact you exist<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>automate things<span class="pl-pds">"</span></span>
+    ],
+    <span class="pl-en">think</span><span class="pl-k">:</span> <span class="pl-k">function</span>(){
+        <span class="pl-k">return</span> <span class="pl-v">this</span>.ideas.<span class="pl-c1">pop</span>() <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">"</span>I'm all out of ideas<span class="pl-pds">"</span></span>
+    },
+
+    position<span class="pl-k">:</span> {x<span class="pl-k">:</span> <span class="pl-c1">0</span>, y<span class="pl-k">:</span> <span class="pl-c1">0</span>},
+    <span class="pl-en">walk</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>){
+        <span class="pl-v">this</span>.position.<span class="pl-c1">x</span> <span class="pl-k">=</span> x
+        <span class="pl-v">this</span>.position.<span class="pl-c1">y</span> <span class="pl-k">=</span> y
+        <span class="pl-k">return</span> <span class="pl-v">this</span>.position
+    }
+}
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Create our plasmid</span>
+<span class="pl-c"> *</span>
+<span class="pl-c"> */</span>
+<span class="pl-k">var</span> cell <span class="pl-k">=</span> plasmid.Promote( organism )
+
+</pre></div>
+
+<p>Start simple</p>
+
+<div class="highlight highlight-javascript"><pre>cell.think() <span class="pl-c">//=&gt; "never let your schooling interfere with your eduction"</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Turn a gene off</span>
+<span class="pl-c"> */</span>
+cell.think.repress()() <span class="pl-c">//=&gt; undefined</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Turn a gene on</span>
+<span class="pl-c"> */</span>
+cell.think.induce()()<span class="pl-c">//=&gt; "you dont get what you don't ask for"</span>
+</pre></div>
+
+<p>Let's get complicated</p>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Only one gene is on.</span>
+<span class="pl-c"> */</span>
+cell.only(<span class="pl-s"><span class="pl-pds">'</span>grow<span class="pl-pds">'</span></span>).think()<span class="pl-c">//=&gt; undefined</span>
+cell.induced()<span class="pl-c">//=&gt; ['grow']</span>
+cell.repressed()<span class="pl-c">//=&gt; ['think','walk']</span>
+cell.grow()<span class="pl-c">//=&gt; 53</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Turning all genes on</span>
+<span class="pl-c"> */</span>
+cell.<span class="pl-c1">all</span>(<span class="pl-c1">true</span>).think()<span class="pl-c">//=&gt; "be persistent"</span>
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * All genes except walk</span>
+<span class="pl-c"> */</span>
+cell.except(<span class="pl-s"><span class="pl-pds">'</span>walk<span class="pl-pds">'</span></span>).grow()<span class="pl-c">//=&gt; undefined</span>
+cell.walk(<span class="pl-c1">20</span>,<span class="pl-c1">15</span>)<span class="pl-c">//=&gt; {x: 20, y:15}</span></pre></div>
+
+<p>Hopefully you're impressed.</p>
+
+<h2>
+<a id="docs" class="anchor" href="#docs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docs</h2>
+
+<p>The module is broken into two parts: <code>Plasmid</code>, which wraps an entire object, and <code>Gene</code> which wraps each function of the newly created plasmid object. Methods can be repressed and induced. When induced, genes perform as expected i.e, mimicking the behavior of the function they wrap. When repressed, genes do nothing at all or perform whichever behavior is specified by their failure function.</p>
+
+<ul>
+<li>
+<p>Plasmid</p>
+
+<ul>
+<li><code>var obj = new plasmid.Plasmid( old_obj[,options])</code></li>
+<li><code>obj.fail( failure_func )</code></li>
+<li><code>obj.all( state )</code></li>
+<li>
+<code>obj.only( method, ...</code>)</li>
+<li><code>obj.except( method, ... )</code></li>
+<li><code>obj.induced()</code></li>
+<li><code>obj.repressed()</code></li>
+</ul>
+</li>
+<li>
+<p>Gene</p>
+
+<ul>
+<li><code>var gene = new plasmid.Gene( function[,options])</code></li>
+<li><code>gene.connect( matcher, responder)</code></li>
+<li><code>gene.induce()</code></li>
+<li><code>gene.repress()</code></li>
+<li><code>gene.fail( failure_func )</code></li>
+<li><code>gene.induced()</code></li>
+<li><code>gene.repressed()</code></li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="plasmid" class="anchor" href="#plasmid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plasmid</h2>
+
+<h3>
+<a id="var-obj--new-plasmidplasmid-target-options" class="anchor" href="#var-obj--new-plasmidplasmid-target-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>var obj = new plasmid.Plasmid( target, [options])</h3>
+
+<p>Creates a new plasmid that wraps <code>target</code>. Note: creating a new plasmid will not modify the original object. Instead, the module creates a new object with the plasmid instance functions as well as the wrapped object's own functions, that when called execute with the <code>this</code> context of the wrapped object.</p>
+
+<p><code>old_obj</code>: the object to wrap
+<code>options</code>: an optional options object with the following (all optional) fields:</p>
+
+<div class="highlight highlight-javascript"><pre>    {
+        exposed<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">"</span>method<span class="pl-pds">"</span></span>, [ <span class="pl-s"><span class="pl-pds">"</span>another method<span class="pl-pds">"</span></span>]],
+        induced<span class="pl-k">:</span> <span class="pl-k">&lt;</span><span class="pl-c1">true</span> | <span class="pl-c1">false</span><span class="pl-k">&gt;</span>
+    }</pre></div>
+
+<p><code>options.exposed</code>: and array containing the names of the functions of the target that should be wrapped.
+<code>options.induced</code>: whether the wrapped methods should start induced. Otherwise, they are repressed. Defaults to true.</p>
+
+<pre><code>
+
+
+</code></pre>
+
+<h3>
+<a id="objfail-failure_func-" class="anchor" href="#objfail-failure_func-" aria-hidden="true"><span class="octicon octicon-link"></span></a>obj.fail( failure_func )</h3>
+
+<p>Pass a failure function to be called when any repressed method is called. Under the hood, it uses <code>gene.failure</code></p>
+
+<div class="highlight highlight-javascript"><pre>cell.fail( <span class="pl-k">function</span>(<span class="pl-smi">method_name</span>, <span class="pl-smi">args</span>{
+   <span class="pl-c">/*----( Your code here )----*/</span>
+})
+</pre></div>
+
+<h3>
+<a id="objall-true--false-" class="anchor" href="#objall-true--false-" aria-hidden="true"><span class="octicon octicon-link"></span></a>obj.all( true | false )</h3>
+
+<p>Set the state of all genes
+<code>true</code>: induced
+<code>false</code>: repressed
+<strong>Returns</strong> the plasmid object, for chaining</p>
+
+<h3>
+<a id="objonly-method--" class="anchor" href="#objonly-method--" aria-hidden="true"><span class="octicon octicon-link"></span></a>obj.only( method, ... )</h3>
+
+<p>Induce the genes specified by their name
+<strong>Returns</strong> the plasmid object, for chaining</p>
+
+<h3>
+<a id="objexcept-method--" class="anchor" href="#objexcept-method--" aria-hidden="true"><span class="octicon octicon-link"></span></a>obj.except( method, ... )</h3>
+
+<p>Turn every gene on except for those specified by their name
+<strong>Returns</strong> the plasmid object, for chaining</p>
+
+<h3>
+<a id="objinduced" class="anchor" href="#objinduced" aria-hidden="true"><span class="octicon octicon-link"></span></a>obj.induced()</h3>
+
+<p>Returns an array of induced genes</p>
+
+<h3>
+<a id="objrepressed" class="anchor" href="#objrepressed" aria-hidden="true"><span class="octicon octicon-link"></span></a>obj.repressed()</h3>
+
+<p>Returns an array of repressed genes</p>
+
+<h2>
+<a id="gene" class="anchor" href="#gene" aria-hidden="true"><span class="octicon octicon-link"></span></a>Gene</h2>
+
+<p>Genes wrap regular functions in <code>Gene</code> instances that can be switched on and off with ease.</p>
+
+<h3>
+<a id="var-gene--new-plasmidgene-function-options" class="anchor" href="#var-gene--new-plasmidgene-function-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>var gene = new plasmid.Gene( function, [options])</h3>
+
+<p>Wraps a function in a gene instance function, allowing you to add meta-functionality to the original function.</p>
+
+<p>Options:</p>
+
+<div class="highlight highlight-javascript"><pre>{
+  context<span class="pl-k">:</span> object,
+  name<span class="pl-k">:</span> the name <span class="pl-k">of</span> the gene,
+  induced<span class="pl-k">:</span> <span class="pl-k">&lt;</span> <span class="pl-c1">true</span> | <span class="pl-c1">false</span> <span class="pl-k">&gt;</span>,
+
+}</pre></div>
+
+<p><code>context</code> the object in whose context to run the wrapped function,
+<code>name</code>: the name of the gene, used to identify it as well as when failure functions are called
+<code>induced</code>: whether the gene should start as being induced.</p>
+
+<h3>
+<a id="geneconnect-matcher-responder" class="anchor" href="#geneconnect-matcher-responder" aria-hidden="true"><span class="octicon octicon-link"></span></a>gene.connect( matcher, responder)</h3>
+
+<p>SConnects a matcher function to a specific responder, allowing you to very easily determine which function should handle a specific instance of arguments. Note: the responder will be called instead of the regular gene function.</p>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-k">function</span> <span class="pl-en">matchStr</span>(<span class="pl-smi">a</span>){
+  <span class="pl-k">return</span> <span class="pl-k">typeof</span> a <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>string<span class="pl-pds">'</span></span>
+}
+
+<span class="pl-k">var</span> insert <span class="pl-k">=</span> {
+
+    <span class="pl-en">mirror</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">arg</span>){
+        <span class="pl-c">// args = Array.prototype.slice.call(arguments, 0)</span>
+        <span class="pl-c">// return args</span>
+        <span class="pl-k">return</span> arg
+    }
+}
+
+<span class="pl-k">var</span> recombinant <span class="pl-k">=</span> plasmid.assemble(insert)
+<span class="pl-k">var</span> string <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>old eagles only order out<span class="pl-pds">"</span></span>
+<span class="pl-k">var</span> integer <span class="pl-k">=</span> <span class="pl-c1">42</span>
+
+recombinant.mirror.connect(matchStr, <span class="pl-k">function</span>(<span class="pl-smi">a</span>){
+  <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>Handling string: <span class="pl-pds">"</span></span>, string)
+  <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>mirrored STRING<span class="pl-pds">"</span></span>
+})
+
+recombinant.mirror.connect(matchNum, <span class="pl-k">function</span>(<span class="pl-smi">a</span>){
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">"</span>Handling number: <span class="pl-pds">"</span></span>, a)
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>mirrored INTEGER<span class="pl-pds">"</span></span>
+})
+
+<span class="pl-c">/*</span>
+<span class="pl-c"> * Look below</span>
+<span class="pl-c"> */</span>
+ recombinant.mirror(<span class="pl-s"><span class="pl-pds">"</span>Hello<span class="pl-pds">"</span></span>)<span class="pl-c">//=&gt;"Hello"</span>
+recombinant.mirror(string)<span class="pl-c">//=&gt;  "mirrored STRING"</span>
+recombinant.mirror(integer)<span class="pl-c">//=&gt; "mirrored INTEGER"</span>
+</pre></div>
+
+<h3>
+<a id="geneinduce" class="anchor" href="#geneinduce" aria-hidden="true"><span class="octicon octicon-link"></span></a>gene.induce()</h3>
+
+<p>Turn the gene one</p>
+
+<h3>
+<a id="generepress" class="anchor" href="#generepress" aria-hidden="true"><span class="octicon octicon-link"></span></a>gene.repress()</h3>
+
+<p>Turn the gene off</p>
+
+<h3>
+<a id="genefail" class="anchor" href="#genefail" aria-hidden="true"><span class="octicon octicon-link"></span></a>gene.fail</h3>
+
+<p>Called when the gene function is invoked while simultaneously being repressed. Whatever the failure function returns will be returned when the repressed gene is invoked.</p>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-k">function</span> <span class="pl-en">hello</span>(<span class="pl-smi">thing</span>){
+  <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>Hello, <span class="pl-pds">"</span></span> <span class="pl-k">+</span> thing
+}
+
+<span class="pl-k">var</span> hi <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">plasmid.Gene</span>(hello, {name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>hello<span class="pl-pds">"</span></span>})
+hi(<span class="pl-s"><span class="pl-pds">'</span>world<span class="pl-pds">'</span></span>)<span class="pl-c">//=&gt; "Hello, world"</span>
+
+hi.fail(<span class="pl-k">function</span>(<span class="pl-smi">function_name</span>, <span class="pl-smi">arguments</span>){
+
+  <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">"</span>Function <span class="pl-pds">"</span></span> <span class="pl-k">+</span> function_name <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>failed with: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> arguments.<span class="pl-c1">toString</span>()
+
+})
+
+hi.repress()(<span class="pl-s"><span class="pl-pds">'</span>bob<span class="pl-pds">'</span></span>)<span class="pl-c">//=&gt; "Function hello failed with: 'bob'"</span>
+</pre></div>
+
+<h3>
+<a id="geneinduced" class="anchor" href="#geneinduced" aria-hidden="true"><span class="octicon octicon-link"></span></a>gene.induced()</h3>
+
+<p><strong>Returns</strong> whether the gene is induced</p>
+
+<h3>
+<a id="generepressed" class="anchor" href="#generepressed" aria-hidden="true"><span class="octicon octicon-link"></span></a>gene.repressed()</h3>
+
+<p><strong>Returns</strong> whether the gene is repressed</p>
+
+<h2>
+<a id="contributions" class="anchor" href="#contributions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributions</h2>
+
+<p>Yes! Contribute!</p>
+
+<p>On a more serious note, I would like to see plasmidjs become the de-facto module for meta - functions. I'd like to add the ability to create waterfalls of async and sync functions, add pre and post gene invocation functions, typecheckers, more complex state management capablities, etc.</p>
+
+<p>If you have any ideas, please submit a pull request or file an issue explaining your idea and I'll do my best to add it.</p>
+
+<hr>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2015 Akiva Lipshitz</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/theideasmith/plasmidjs">Plasmidjs</a> is maintained by <a href="https://github.com/theideasmith">theideasmith</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
