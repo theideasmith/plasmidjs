@@ -4,6 +4,8 @@ Plasmidjs allows you to treat an object as a cell and each of its methods as gen
 
 This is the child of synthetic biology and nodejs and was inspired by the author's experience at Cooper Union's Summer STEM iGem track as well as by [conduitjs](https://github.com/ifandelse/ConduitJS).
 
+`npm install plasmidjs`
+
 ## Background
 
 Synthetic biology is defined as:
