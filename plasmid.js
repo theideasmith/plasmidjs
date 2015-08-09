@@ -30,11 +30,43 @@
   }
 
 
-  function Promoter(){
+  function Promoter() {
 
   }
 
-  function Operon(){
+  function Operon() {
+    var pipeline = {
+      pre: [],
+      actual: [],
+      post: [],
+      all: []
+    }
+
+    function genPipeline() {
+
+      pipeline
+        .all = pipeline
+        .pre
+        .concat(pipeline.actual)
+        .concat(pipeline.post)
+
+      pipeline.all = pipeline.actual
+    }
+    genPipeline()
+
+    function syncNext() {
+
+    }
+
+    function asyncNext() {
+
+
+    }
+
+    function next() {
+      if (index === pipeline.all.length) return
+
+    }
 
   }
 
@@ -62,41 +94,18 @@
       if (!_failure_func) return
       if (!_failure_func.func) return
       var args = arrArr(args)
-
-      _failure_func.apply(
-        _failure_func.context || _options.context
-        , args)
+      _failure_func.func.apply(
+        _failure_func.context || _options.context, args)
 
     }
 
 
-    var pipeline = {
-      pre: [],
-      actual: [dispatch],
-      post: [],
-      all: []
+
+    function arrArr(args) {
+      if (args && typeof args === 'object')
+        return Array.prototype.slice.call(args, 0)
     }
 
-    function arrArr(args){
-      if(args && typeof args === 'object')
-      return Array.prototype.slice.call(args, 0)
-    }
-
-    function genPipeline() {
-      /*
-
-      SEE "MAYBE FOR SOMETIME IN THE FUTURE"
-      pipeline
-        .all = pipeline
-        .pre
-        .concat(pipeline.actual)
-        .concat(pipeline.post)
-
-      */
-
-      pipeline.all = pipeline.actual
-    }
-    genPipeline()
 
 
     var _default_dispatcher = {
@@ -106,17 +115,17 @@
 
     function addDispatcher(dispatcher) {
       if (!(dispatcher.matcher &&
-        typeof dispatcher.matcher === 'function')) {
+          typeof dispatcher.matcher === 'function')) {
 
-          throw new TypeError("Error while adding dispatcher "+
+        throw new TypeError("Error while adding dispatcher " +
           "Can only add functions as matcher")
       }
 
       if (!(dispatcher.func &&
-        typeof dispatcher.func === 'function')){
+          typeof dispatcher.func === 'function')) {
 
-        throw new TypeError("Error while adding dispatcher"+
-        "Can only add functions to dispatch to")
+        throw new TypeError("Error while adding dispatcher" +
+          "Can only add functions to dispatch to")
 
       }
       if (!dispatcher.context) {
@@ -137,8 +146,8 @@
         var dispatcher = _dispatchers[i]
 
         if (dispatcher
-            .matcher
-            .apply(dispatcher.context, args)) {
+          .matcher
+          .apply(dispatcher.context, args)) {
 
           res = dispatcher.func.apply(dispatcher.context, args)
           hit_valid_matcher = true
@@ -149,41 +158,23 @@
 
       if (!hit_valid_matcher) {
         res = _default_dispatcher
-              .func
-              .apply(_default_dispatcher
-                .context,args)
+          .func
+          .apply(_default_dispatcher
+            .context, args)
       }
       return res
     }
-    /*
 
-    MAYBE FOR SOMETIME IN THE FUTURE:
-
-    function syncNext(){
-
-    }
-
-    function asyncNext() {
-
-
-    }
-
-    function next(){
-      if (index === pipeline.all.length) return
-
-    }
-
-    */
     function gene() {
 
       _executing = true
       if (_induced === false) {
-        return fail(this, [_options.name, arrArr(arguments)] )
+        return fail(this, [_options.name, arrArr(arguments)])
 
       }
 
       var args = arrArr(arguments)
-      var r =  dispatch.apply(this, args)
+      var r = dispatch.apply(this, args)
       _executing = false
       return r
 
@@ -194,13 +185,13 @@
       // if(_executing === true) return
       if (typeof func !== 'function') {
 
-          throw new TypeError("plasmid.gene@connect " +
+        throw new TypeError("plasmid.gene@connect " +
           "can only connect to functions, not " + typeof func)
 
       }
       if (typeof matcherfunc !== 'function') {
 
-          throw new TypeError("plasmid.gene@connect "+
+        throw new TypeError("plasmid.gene@connect " +
           "can only match using function, not " + typeof matcherfunc)
 
       }
@@ -215,39 +206,34 @@
       return this
     }
 
-    gene.induce = function(){
+    gene.induce = function() {
       _induced = true
       return this
     }
 
-    gene.repress = function(){
+    gene.repress = function() {
       _induced = false
       return this
     }
 
-    gene.failure = function(func, context){
+    gene.failure = function(func, context) {
       if (func && typeof func === 'function' && _executing === false) {
-          _failure_func = {
-            func: func,
-            context: context
-          }
-      }
-      else {
+        _failure_func = {
+          func: func,
+          context: context
+        }
+      } else {
         throw new TypeError(
-                "Invalid type"
-              , " "
-              , typeof func
-              , " passed for failure function"
-              , " only type 'function' valid")
+          "Invalid type", " ", typeof func, " passed for failure function", " only type 'function' valid")
       }
       return this
     }
 
-    gene.induced = function(){
+    gene.induced = function() {
       return _induced
     }
 
-    gene.repressed = function(){
+    gene.repressed = function() {
       return !_induced
     }
 
@@ -261,13 +247,14 @@
 
   function Plasmid(target, options) {
     options = options || {}
+    target = target || {}
     if (typeof target !== "object") {
       throw new TypeError("You can only operate on objects")
     }
 
     var _exposed_functions =
       options.exposed ||
-      Object.keys(target)
+      Object.keys(target).filter(function(e){return target[e] !== null})
 
     var _start_induced = true
     if (options.induced !== undefined) {
@@ -278,14 +265,14 @@
     var _plasmid = {}
 
 
-    function write(name, to){
+    function write(name, to) {
       if (typeof to === 'boolean' && _funcs[name]) {
         to === true ? _funcs[name].induce() : _funcs[name].repress()
       }
     }
 
     function fill(names, value) {
-      names.forEach(function(name){
+      names.forEach(function(name) {
         write(name, value)
       })
 
@@ -307,20 +294,17 @@
     _plasmid.recombinate = function(promoter, gene, context) {
 
       if ((this[promoter]) || (typeof gene !== 'function'))
-        throw new TypeError("plasmid@recombinate invalid method type "
-        , typeof gene
-        , "not of type function")
+        throw new TypeError("plasmid@recombinate invalid method type ", typeof gene, "not of type function")
 
       if (context && (typeof context !== 'object'))
-        throw new TypeError("plasmid@recombinate type "
-        , typeof context
-        , "invalid. Can only call method"
-        , "in context of 'object'")
+        throw new TypeError("plasmid@recombinate type ", typeof context, "invalid. Can only call method", "in context of 'object'")
 
       var gene = new Gene(gene, {
-            context: context,
-            induced: _start_induced
+        context: gene,
+        induced: _start_induced,
+        name: promoter
       })
+      gene.parent = target
       this[promoter] = _funcs[promoter] = gene
 
     }
@@ -350,26 +334,24 @@
      */
 
     _plasmid.induced = function() {
-      Object.filter(Object.keys(_induced), function(promoter){
+      Object.filter(Object.keys(_induced), function(promoter) {
         return _plasmid[promoter].induced === true
       })
     }
 
     _plasmid.repressed = function() {
-      Object.filter(Object.keys(_induced), function(promoter){
+      Object.filter(Object.keys(_induced), function(promoter) {
         return _plasmid[promoter].induced === false
       })
     }
 
     _plasmid.fail = function(failure_func, context) {
       if (typeof failure_func !== 'function' &&
-          (_failure_func === null)){
-            throw new TypeError("plasmid@fail invalid type "
-            , typeof failure_func
-            , " not of type function")
+        (_failure_func === null)) {
+        throw new TypeError("plasmid@fail invalid type ", typeof failure_func, " not of type function")
 
-          }
-      for (f in _funcs){
+      }
+      for (f in _funcs) {
         var func = _funcs[f]
         func.failure(failure_func, context)
       }
@@ -388,14 +370,14 @@
     return _plasmid
   }
   return {
-    assemble: function(object, options){
+    assemble: function(object, options) {
       return new Plasmid(object, options)
     },
     Plasmid: function(object, options) {
-      return Plasmid.call(this,object, options)
+      return Plasmid.call(this, object, options)
     },
     Gene: function() {
-      return Gene.call(this,arguments[0], arguments[1])
+      return Gene.call(this, arguments[0], arguments[1])
     }
   }
 }))
