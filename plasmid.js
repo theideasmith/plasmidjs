@@ -291,22 +291,22 @@
      *
      */
 
-    _plasmid.recombinate = function(promoter, gene, context) {
-
-      if ((this[promoter]) || (typeof gene !== 'function'))
-        throw new TypeError("plasmid@recombinate invalid method type ", typeof gene, "not of type function")
+    _plasmid.recombinate = function(promoter, func, context) {
+      if (typeof func !== 'function'){
+        this[promoter] = func
+        return this
+      }
 
       if (context && (typeof context !== 'object'))
-        throw new TypeError("plasmid@recombinate type ", typeof context, "invalid. Can only call method", "in context of 'object'")
+        throw new TypeError("plasmid@recombinate type " + typeof context + "invalid. Can only call method", "in context of 'object'")
 
-      var gene = new Gene(gene, {
-        context: gene,
+      var gene = new Gene(func, {
+        context: context,
         induced: _start_induced,
         name: promoter
       })
-      gene.parent = target
       this[promoter] = _funcs[promoter] = gene
-
+      return this
     }
 
     _plasmid.all = function(val) {
@@ -364,7 +364,7 @@
      *
      */
     _exposed_functions.forEach(function(func_name) {
-      _plasmid.recombinate(func_name, target[func_name])
+      _plasmid.recombinate(func_name, target[func_name], _plasmid)
     })
 
     return _plasmid

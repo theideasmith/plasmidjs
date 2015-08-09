@@ -1,6 +1,6 @@
 {
   "name": "plasmidjs",
-  "version": "0.0.2",
+  "version": "v0.0.5",
   "description": "Giving you the power to control which functions can be called on an object.",
   "main": "plasmid.js",
   "dependencies": {},
