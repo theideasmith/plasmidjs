@@ -54,7 +54,7 @@ var organism = {
  * Create our plasmid
  *
  */
-var cell = plasmid.Promote( organism )
+var cell = plasmid.assemble( organism )
 
 
 ```
@@ -95,7 +95,7 @@ cell.all(true).think()//=> "be persistent"
 /*
  * All genes except walk
  */
-cell.except('walk').grow()//=> undefined
+cell.except('grow').grow()//=> undefined
 cell.walk(20,15)//=> {x: 20, y:15}
 ```
 
@@ -106,7 +106,8 @@ Hopefully you're impressed.
 The module is broken into two parts: `Plasmid`, which wraps an entire object, and `Gene` which wraps each function of the newly created plasmid object. Methods can be repressed and induced. When induced, genes perform as expected i.e, mimicking the behavior of the function they wrap. When repressed, genes do nothing at all or perform whichever behavior is specified by their failure function.
 
 + Plasmid
-  + `var obj = new plasmid.Plasmid( old_obj[,options])`
+  + `var obj = new plasmid.Plasmid( old_obj, [options])`
+  + `var obj = plasmid.assemble(old_obj, [options])`
   + `obj.fail( failure_func )`
   + `obj.all( state )`
   + `obj.only( method, ... `)
@@ -115,7 +116,7 @@ The module is broken into two parts: `Plasmid`, which wraps an entire object, an
   + `obj.repressed()`
 
 + Gene
-  + `var gene = new plasmid.Gene( function[,options])`
+  + `var gene = new plasmid.Gene( function, [options])`
   + `gene.connect( matcher, responder)`
   + `gene.induce()`
   + `gene.repress()`
@@ -123,7 +124,7 @@ The module is broken into two parts: `Plasmid`, which wraps an entire object, an
   + `gene.induced()`
   + `gene.repressed()`
 
-##Plasmid
+## Plasmid
 ### var obj = new plasmid.Plasmid( target, [options])
 
 Creates a new plasmid that wraps `target`. Note: creating a new plasmid will not modify the original object. Instead, the module creates a new object with the plasmid instance functions as well as the wrapped object's own functions, that when called execute with the `this` context of the wrapped object.
@@ -139,11 +140,9 @@ Creates a new plasmid that wraps `target`. Note: creating a new plasmid will not
 `options.exposed`: and array containing the names of the functions of the target that should be wrapped.
 `options.induced`: whether the wrapped methods should start induced. Otherwise, they are repressed. Defaults to true.
 
-```
+### var obj = plasmid.assemble(old_obj, [options])
 
-
-
-```
+Creates a new plasmid just like `new plasmid.Plasmid` but without the need for the `new` keyword. This method was created for the sake of language, allowing you to write such elaborate code as `var recombinant_dna = plasmid.assemble( insert )`. If you are familiar with synthetic biology, you should be really excited. 
 
 ### obj.fail( failure_func )
 
