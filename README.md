@@ -4,6 +4,13 @@ Plasmidjs allows you to treat an object as a cell and each of its methods as gen
 
 This is the child of synthetic biology and nodejs and was inspired by the author's experience at Cooper Union's Summer STEM iGem track as well as by [conduitjs](https://github.com/ifandelse/ConduitJS).
 
+Some modules that make for excellent integrations with plasmidjs are:
+
++ **machina.js** finite state machine
++ **is.js** check if a string is X (a url, an email, a date, etc.)
++ **conduit.js** wrap pre and post invocation functions around a function
++ **joi.js** validate object against JSON schema
+
 `npm install plasmidjs`
 
 ## Background
@@ -253,7 +260,7 @@ Turn the gene one
 
 Turn the gene off
 
-### gene.fail
+### gene.fail( function )
 
 Called when the gene function is invoked while simultaneously being repressed. Whatever the failure function returns will be returned when the repressed gene is invoked.
 

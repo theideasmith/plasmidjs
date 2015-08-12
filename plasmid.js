@@ -88,25 +88,22 @@
     var _index = 0
     var _dispatchers = []
     var _induced = _options.induced
+    var _destroyed = false
     var _failure_func
 
     function fail() {
       if (!_failure_func) return
       if (!_failure_func.func) return
-      var args = arrArr(args)
-      _failure_func.func.apply(
+      var args = arrArr(arguments)
+      return _failure_func.func.apply(
         _failure_func.context || _options.context, args)
 
     }
-
-
 
     function arrArr(args) {
       if (args && typeof args === 'object')
         return Array.prototype.slice.call(args, 0)
     }
-
-
 
     var _default_dispatcher = {
       func: func,
@@ -117,14 +114,16 @@
       if (!(dispatcher.matcher &&
           typeof dispatcher.matcher === 'function')) {
 
-        throw new TypeError("Error while adding dispatcher " +
+        throw new TypeError(
+          "Error while adding dispatcher " +
           "Can only add functions as matcher")
       }
 
       if (!(dispatcher.func &&
           typeof dispatcher.func === 'function')) {
 
-        throw new TypeError("Error while adding dispatcher" +
+        throw new TypeError(
+          "Error while adding dispatcher" +
           "Can only add functions to dispatch to")
 
       }
@@ -136,7 +135,10 @@
 
     function dispatch() {
 
-      var args = Array.prototype.slice.call(arguments, 0)
+      var args = Array
+                  .prototype
+                  .slice
+                  .call(arguments, 0)
 
       var hit_valid_matcher = false
       var res
@@ -149,7 +151,9 @@
           .matcher
           .apply(dispatcher.context, args)) {
 
-          res = dispatcher.func.apply(dispatcher.context, args)
+          res = dispatcher
+            .func
+            .apply(dispatcher.context, args)
           hit_valid_matcher = true
 
         }
@@ -168,8 +172,8 @@
     function gene() {
 
       _executing = true
-      if (_induced === false) {
-        return fail(this, [_options.name, arrArr(arguments)])
+      if ((_induced === false) || (_destroyed === true)) {
+        return fail.apply(this, [_options.name, arrArr(arguments)])
 
       }
 
@@ -192,7 +196,8 @@
       if (typeof matcherfunc !== 'function') {
 
         throw new TypeError("plasmid.gene@connect " +
-          "can only match using function, not " + typeof matcherfunc)
+          "can only match using function, not " +
+          typeof matcherfunc)
 
       }
 
@@ -216,7 +221,7 @@
       return this
     }
 
-    gene.failure = function(func, context) {
+    gene.fail = function(func, context) {
       if (func && typeof func === 'function' && _executing === false) {
         _failure_func = {
           func: func,
@@ -236,8 +241,11 @@
     gene.repressed = function() {
       return !_induced
     }
-
-    name: _options.name
+    gene.destroy = function(){
+      _destroyed = true
+      return this
+    }
+    gene.name = _options.name
 
     return gene
 
@@ -301,7 +309,7 @@
         throw new TypeError("plasmid@recombinate type " + typeof context + "invalid. Can only call method", "in context of 'object'")
 
       var gene = new Gene(func, {
-        context: context,
+        context: context || target,
         induced: _start_induced,
         name: promoter
       })
@@ -353,7 +361,7 @@
       }
       for (f in _funcs) {
         var func = _funcs[f]
-        func.failure(failure_func, context)
+        func.fail(failure_func, context)
       }
     }
 
@@ -364,7 +372,7 @@
      *
      */
     _exposed_functions.forEach(function(func_name) {
-      _plasmid.recombinate(func_name, target[func_name], _plasmid)
+      _plasmid.recombinate(func_name, target[func_name], target)
     })
 
     return _plasmid

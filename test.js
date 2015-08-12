@@ -23,7 +23,8 @@ describe("Am-Plasmid", function(){
 
   var sulA = insert.sulA()
   var lexA = insert.lexA()
-  var mirror = insert.mirror("What the heck is a riboswitch?")
+  var mirror = insert
+        .mirror("What the heck is a riboswitch?")
 
   var recombinant
 
@@ -139,7 +140,26 @@ describe("Am-Plasmid", function(){
         recombinant.mirror(string).should.equal("STRING")
         recombinant.mirror(integer).should.equal("INTEGER")
 
+    })
+
+    it("should call a failure function"+
+    " when a turned off method is called", function(){
+      function hello(thing){
+        return "Hello, " + thing
+      }
+
+      var hi = new plasmid.Gene(hello, {name: "hello"})
+      hi('world')//=> "Hello, world"
+
+      hi.fail(function(function_name, arguments){
+
+        return "Function " + function_name + " failed with: " + arguments.toString()
+
       })
+
+      hi.repress()('bob').should.equal("Function hello failed with: bob")
+
+    })
 
     it("should match to the second matcher function "+
       "when two are passed that both match", function() {
