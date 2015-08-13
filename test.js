@@ -151,9 +151,9 @@ describe("Am-Plasmid", function(){
       var hi = new plasmid.Gene(hello, {name: "hello"})
       hi('world')//=> "Hello, world"
 
-      hi.fail(function(function_name, arguments){
+      hi.fail(function(function_name, args){
 
-        return "Function " + function_name + " failed with: " + arguments.toString()
+        return "Function " + function_name + " failed with: " + args.toString()
 
       })
 
