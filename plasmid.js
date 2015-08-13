@@ -76,6 +76,7 @@
       throw new TypeError("Gene@Gene Can only make" +
         "genes out of functions")
 
+    var options = {}
 
     var _options = {
       sync: options.sync || true,
