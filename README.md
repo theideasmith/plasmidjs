@@ -130,6 +130,7 @@ The module is broken into two parts: `Plasmid`, which wraps an entire object, an
   + `gene.fail( failure_func )`
   + `gene.induced()`
   + `gene.repressed()`
+  + `gene.destroy()`
 
 ## Plasmid
 ### var obj = new plasmid.Plasmid( target, [options])
@@ -149,7 +150,7 @@ Creates a new plasmid that wraps `target`. Note: creating a new plasmid will not
 
 ### var obj = plasmid.assemble(old_obj, [options])
 
-Creates a new plasmid just like `new plasmid.Plasmid` but without the need for the `new` keyword. This method was created for the sake of language, allowing you to write such elaborate code as `var recombinant_dna = plasmid.assemble( insert )`. If you are familiar with synthetic biology, you should be really excited. 
+Creates a new plasmid just like `new plasmid.Plasmid` but without the need for the `new` keyword. This method was created for the sake of language, allowing you to write such elaborate code as `var recombinant_dna = plasmid.assemble( insert )`. If you are familiar with synthetic biology, you should be really excited.
 
 ### obj.fail( failure_func )
 
@@ -290,6 +291,9 @@ hi.repress()('bob')//=> "Function hello failed with: 'bob'"
 
 **Returns** whether the gene is repressed
 
+### gene.destroy()
+
+Prevent the gene from ever being used again!
 
 ## Contributions
 
