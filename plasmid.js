@@ -76,14 +76,15 @@
       throw new TypeError("Gene@Gene Can only make" +
         "genes out of functions")
 
-    var options = {}
+    var options = options || {}
 
     var _options = {
       sync: options.sync || true,
-      context: options.context || func,
+      context: options.context || gene,
       induced: options.induced,
       name: options.name || null
     }
+
 
     var _executing = false
     var _index = 0
