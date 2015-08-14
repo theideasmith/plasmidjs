@@ -1,0 +1,107 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/bin/iojs',
+1 verbose cli   '/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@2.13.3
+3 info using node@v3.0.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec { raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/akivalipshitz/Developer/Code/Automata/plasmidjs',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/akivalipshitz/.npm/plasmidjs/2.0.3/package.tgz not in flight; packing
+9 verbose tar pack [ '/Users/akivalipshitz/.npm/plasmidjs/2.0.3/package.tgz',
+9 verbose tar pack   '/Users/akivalipshitz/Developer/Code/Automata/plasmidjs' ]
+10 verbose tarball /Users/akivalipshitz/.npm/plasmidjs/2.0.3/package.tgz
+11 verbose folder /Users/akivalipshitz/Developer/Code/Automata/plasmidjs
+12 info prepublish plasmidjs@2.0.3
+13 verbose addLocalTarball adding from inside cache /Users/akivalipshitz/.npm/plasmidjs/2.0.3/package.tgz
+14 silly cache afterAdd plasmidjs@2.0.3
+15 verbose afterAdd /Users/akivalipshitz/.npm/plasmidjs/2.0.3/package/package.json not in flight; writing
+16 verbose afterAdd /Users/akivalipshitz/.npm/plasmidjs/2.0.3/package/package.json written
+17 silly publish { name: 'plasmidjs',
+17 silly publish   version: '2.0.3',
+17 silly publish   description: 'Giving you the power to control which functions can be called on an object.',
+17 silly publish   main: 'plasmid.js',
+17 silly publish   dependencies: {},
+17 silly publish   devDependencies: { mocha: '^2.2.5', should: '^7.0.1' },
+17 silly publish   scripts: { test: 'mocha' },
+17 silly publish   repository:
+17 silly publish    { type: 'git',
+17 silly publish      url: 'http://www.github.com/theideasmith/plasmidjs' },
+17 silly publish   keywords:
+17 silly publish    [ 'control',
+17 silly publish      'induce',
+17 silly publish      'switch',
+17 silly publish      'on',
+17 silly publish      'off',
+17 silly publish      'plasmid',
+17 silly publish      'plasmidjs',
+17 silly publish      'repress',
+17 silly publish      'function',
+17 silly publish      'conduitjs' ],
+17 silly publish   author:
+17 silly publish    { name: 'Akiva Lipshitz',
+17 silly publish      email: 'aclscientist@gmail.com',
+17 silly publish      url: 'http://www.github.com/theideasmith' },
+17 silly publish   license: 'MIT',
+17 silly publish   readme: '# Plasmidjs\n\nPlasmidjs allows you to treat an object as a cell and each of its methods as genes allowing you to control which methods/genes are switched on, and what happens if an *switched-off* method is called.\n\nThis is the child of synthetic biology and nodejs and was inspired by the author\'s experience at Cooper Union\'s Summer STEM iGem track as well as by [conduitjs](https://github.com/ifandelse/ConduitJS).\n\nSome modules that make for excellent integrations with plasmidjs are:\n\n+ **machina.js** finite state machine\n+ **is.js** check if a string is X (a url, an email, a date, etc.)\n+ **conduit.js** wrap pre and post invocation functions around a function\n+ **joi.js** validate object against JSON schema\n\n`npm install plasmidjs`\n\n## Background\n\nSynthetic biology is defined as:\n> an interdisciplinary branch of biology, combining disciplines such as biotechnology, evolutionary biology, molecular biology, systems biology, biophysics, computer engineering, and is in many ways related to genetic engineering.\n\nSynthetic biologists study the construction of new biological mechanisms and ways to optimize their design and development. More specifically, synthetic biologists can design custom DNA and insert it into a cell to engineer organisms to their liking and solve many of the world\'s problems.\n\nUsually, the type of DNA used is a plasmid – hence the name *Plasmidjs* . After DNA insertion, the cell begins to express whichever functions are encoded by the genes in this DNA. Sometimes, it is necessary that only certain genes be activated at a time. This feat is accomplished by the use of a special part of DNA called a promoter which can switch genes on and off.\n\nVery simply, the promoter is either induced or repressed. If it is repressed, the gene it controls is not expressed. If it is induced, the gene it controls is expressed.\n\n## So what?\n\nConcepts from synthetic biology provide the perfect metaphor for a javascript library that enables you to switch on and off object functions.\n\n```javascript\nvar plasmid = require(\'plasmidjs\')\n\nvar organism = {\n    height: 50,\n    grow: function(){\n        this.height+=3\n        return this.height\n    },\n\n    ideas: [\n        "never let your schooling interfere with your eduction",\n        "you dont get what you don\'t ask for",\n        "be persistent",\n        "take advantage of the fact you exist",\n        "automate things"\n    ],\n    think: function(){\n        return this.ideas.pop() || "I\'m all out of ideas"\n    },\n\n    position: {x: 0, y: 0},\n    walk: function(x, y){\n        this.position.x = x\n        this.position.y = y\n        return this.position\n    }\n}\n\n/*\n * Create our plasmid\n *\n */\nvar cell = plasmid.assemble( organism )\n\n\n```\nStart simple\n\n```javascript\ncell.think() //=> "never let your schooling interfere with your eduction"\n\n/*\n * Turn a gene off\n */\ncell.think.repress()() //=> undefined\n\n/*\n * Turn a gene on\n */\ncell.think.induce()()//=> "you dont get what you don\'t ask for"\n\n```\n\nLet\'s get complicated\n\n```javascript\n\n/*\n * Only one gene is on.\n */\ncell.only(\'grow\').think()//=> undefined\ncell.induced()//=> [\'grow\']\ncell.repressed()//=> [\'think\',\'walk\']\ncell.grow()//=> 53\n\n/*\n * Turning all genes on\n */\ncell.all(true).think()//=> "be persistent"\n\n/*\n * All genes except walk\n */\ncell.except(\'grow\').grow()//=> undefined\ncell.walk(20,15)//=> {x: 20, y:15}\n```\n\nHopefully you\'re impressed.\n\n## Docs\n\nThe module is broken into two parts: `Plasmid`, which wraps an entire object, and `Gene` which wraps each function of the newly created plasmid object. Methods can be repressed and induced. When induced, genes perform as expected i.e, mimicking the behavior of the function they wrap. When repressed, genes do nothing at all or perform whichever behavior is specified by their failure function.\n\n+ Plasmid\n  + `var obj = new plasmid.Plasmid( old_obj, [options])`\n  + `var obj = plasmid.assemble(old_obj, [options])`\n  + `obj.fail( failure_func )`\n  + `obj.all( state )`\n  + `obj.only( method, ... `)\n  + `obj.except( method, ... )`\n  + `obj.induced()`\n  + `obj.repressed()`\n\n+ Gene\n  + `var gene = new plasmid.Gene( function, [options])`\n  + `gene.connect( matcher, responder)`\n  + `gene.induce()`\n  + `gene.repress()`\n  + `gene.fail( failure_func )`\n  + `gene.induced()`\n  + `gene.repressed()`\n  + `gene.destroy()`\n\n## Plasmid\n### var obj = new plasmid.Plasmid( target, [options])\n\nCreates a new plasmid that wraps `target`. Note: creating a new plasmid will not modify the original object. Instead, the module creates a new object with the plasmid instance functions as well as the wrapped object\'s own functions, that when called execute with the `this` context of the wrapped object.\n\n`old_obj`: the object to wrap\n`options`: an optional options object with the following (all optional) fields:\n```javascript\n    {\n        exposed: ["method", [ "another method"]],\n        induced: <true | false>\n    }\n```\n`options.exposed`: and array containing the names of the functions of the target that should be wrapped.\n`options.induced`: whether the wrapped methods should start induced. Otherwise, they are repressed. Defaults to true.\n\n### var obj = plasmid.assemble(old_obj, [options])\n\nCreates a new plasmid just like `new plasmid.Plasmid` but without the need for the `new` keyword. This method was created for the sake of language, allowing you to write such elaborate code as `var recombinant_dna = plasmid.assemble( insert )`. If you are familiar with synthetic biology, you should be really excited.\n\n### obj.fail( failure_func )\n\nPass a failure function to be called when any repressed method is called. Under the hood, it uses `gene.failure`\n\n```javascript\ncell.fail( function(method_name, args{\n   /*----( Your code here )----*/\n})\n\n```\n\n### obj.all( true | false )\nSet the state of all genes\n`true`: induced\n`false`: repressed\n**Returns** the plasmid object, for chaining\n\n### obj.only( method, ... )\n\nInduce the genes specified by their name\n**Returns** the plasmid object, for chaining\n\n### obj.except( method, ... )\n\nTurn every gene on except for those specified by their name\n**Returns** the plasmid object, for chaining\n\n### obj.induced()\n\nReturns an array of induced genes\n\n### obj.repressed()\n\nReturns an array of repressed genes\n\n##Gene\n\nGenes wrap regular functions in `Gene` instances that can be switched on and off with ease.\n\n### var gene = new plasmid.Gene( function, [options])\n\nWraps a function in a gene instance function, allowing you to add meta-functionality to the original function.\n\nOptions:\n\n```javascript\n{\n  context: object,\n  name: the name of the gene,\n  induced: < true | false >,\n\n}\n```\n\n`context` the object in whose context to run the wrapped function,\n`name`: the name of the gene, used to identify it as well as when failure functions are called\n`induced`: whether the gene should start as being induced.\n\n### gene.connect( matcher, responder)\n\nSConnects a matcher function to a specific responder, allowing you to very easily determine which function should handle a specific instance of arguments. Note: the responder will be called instead of the regular gene function.\n\n```javascript\n\nfunction matchStr(a){\n  return typeof a === \'string\'\n}\n\nvar insert = {\n\n    mirror: function(arg){\n        // args = Array.prototype.slice.call(arguments, 0)\n        // return args\n        return arg\n    }\n}\n\nvar recombinant = plasmid.assemble(insert)\nvar string = "old eagles only order out"\nvar integer = 42\n\nrecombinant.mirror.connect(matchStr, function(a){\n  console.log("Handling string: ", string)\n  return "mirrored STRING"\n})\n\nrecombinant.mirror.connect(matchNum, function(a){\n    console.log("Handling number: ", a)\n    return "mirrored INTEGER"\n})\n\n/*\n * Look below\n */\n recombinant.mirror("Hello")//=>"Hello"\nrecombinant.mirror(string)//=>  "mirrored STRING"\nrecombinant.mirror(integer)//=> "mirrored INTEGER"\n\n```\n\n### gene.induce()\n\nTurn the gene one\n\n### gene.repress()\n\nTurn the gene off\n\n### gene.fail( function )\n\nCalled when the gene function is invoked while simultaneously being repressed. Whatever the failure function returns will be returned when the repressed gene is invoked.\n\n```javascript\n\nfunction hello(thing){\n  return "Hello, " + thing\n}\n\nvar hi = new plasmid.Gene(hello, {name: "hello"})\nhi(\'world\')//=> "Hello, world"\n\nhi.fail(function(function_name, arguments){\n\n  return "Function " + function_name + "failed with: " + arguments.toString()\n\n})\n\nhi.repress()(\'bob\')//=> "Function hello failed with: \'bob\'"\n\n```\n\n### gene.induced()\n\n**Returns** whether the gene is induced\n\n### gene.repressed()\n\n**Returns** whether the gene is repressed\n\n### gene.destroy()\n\nPrevent the gene from ever being used again!\n\n## Contributions\n\nYes! Contribute!\n\nOn a more serious note, I would like to see plasmidjs become the de-facto module for meta - functions. I\'d like to add the ability to create waterfalls of async and sync functions, add pre and post gene invocation functions, typecheckers, more complex state management capablities, etc.\n\nIf you have any ideas, please submit a pull request or file an issue explaining your idea and I\'ll do my best to add it.\n\n\n\n\n-------------\n\n## License\n\nThe MIT License (MIT)\n\nCopyright (c) 2015 Akiva Lipshitz\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n',
+17 silly publish   readmeFilename: 'README.md',
+17 silly publish   gitHead: '1d71f8f8c350a853112cc776d98bb9516c216556',
+17 silly publish   _id: 'plasmidjs@2.0.3',
+17 silly publish   _shasum: '132e65f6f294a250e8fabecb1063e727f1fac958',
+17 silly publish   _from: '.' }
+18 verbose getPublishConfig undefined
+19 silly mapToRegistry name plasmidjs
+20 silly mapToRegistry using default registry
+21 silly mapToRegistry registry https://registry.npmjs.org/
+22 silly mapToRegistry uri https://registry.npmjs.org/plasmidjs
+23 verbose publish registryBase https://registry.npmjs.org/
+24 silly publish uploading /Users/akivalipshitz/.npm/plasmidjs/2.0.3/package.tgz
+25 verbose request uri https://registry.npmjs.org/plasmidjs
+26 verbose request sending authorization for write operation
+27 info attempt registry request try #1 at 08:26:31
+28 verbose request using bearer token for auth
+29 verbose request id dd3ff728937d5432
+30 http request PUT https://registry.npmjs.org/plasmidjs
+31 http 403 https://registry.npmjs.org/plasmidjs
+32 verbose headers { 'content-type': 'application/json',
+32 verbose headers   'cache-control': 'max-age=60',
+32 verbose headers   'content-length': '95',
+32 verbose headers   'accept-ranges': 'bytes',
+32 verbose headers   date: 'Fri, 14 Aug 2015 12:27:08 GMT',
+32 verbose headers   via: '1.1 varnish',
+32 verbose headers   connection: 'keep-alive',
+32 verbose headers   'x-served-by': 'cache-iad2121-IAD',
+32 verbose headers   'x-cache': 'MISS',
+32 verbose headers   'x-cache-hits': '0',
+32 verbose headers   'x-timer': 'S1439555227.870742,VS0,VE867' }
+33 verbose request invalidating /Users/akivalipshitz/.npm/registry.npmjs.org/plasmidjs on PUT
+34 error publish Failed PUT 403
+35 verbose stack Error: "You cannot publish over the previously published version 2.0.3." : plasmidjs
+35 verbose stack     at CachingRegistryClient.<anonymous> (/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:247:14)
+35 verbose stack     at Request._callback (/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:170:14)
+35 verbose stack     at Request.self.callback (/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/lib/node_modules/npm/node_modules/request/request.js:198:22)
+35 verbose stack     at emitTwo (events.js:87:13)
+35 verbose stack     at Request.emit (events.js:172:7)
+35 verbose stack     at Request.<anonymous> (/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/lib/node_modules/npm/node_modules/request/request.js:1057:14)
+35 verbose stack     at emitOne (events.js:82:20)
+35 verbose stack     at Request.emit (events.js:169:7)
+35 verbose stack     at IncomingMessage.<anonymous> (/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/lib/node_modules/npm/node_modules/request/request.js:1003:12)
+35 verbose stack     at emitNone (events.js:72:20)
+36 verbose statusCode 403
+37 verbose pkgid plasmidjs
+38 verbose cwd /Users/akivalipshitz/Developer/Code/Automata/plasmidjs
+39 error Darwin 14.3.0
+40 error argv "/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/bin/iojs" "/Users/akivalipshitz/.nvm/versions/io.js/v3.0.0/bin/npm" "publish"
+41 error node v3.0.0
+42 error npm  v2.13.3
+43 error code E403
+44 error "You cannot publish over the previously published version 2.0.3." : plasmidjs
+45 error If you need help, you may report this error at:
+45 error     <https://github.com/npm/npm/issues>
+46 verbose exit [ 1, true ]
