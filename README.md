@@ -1,8 +1,8 @@
 # Plasmidjs
 [![Build Status](https://travis-ci.org/theideasmith/plasmidjs.svg?m)](https://travis-ci.org/theideasmith/plasmidjs)
 
-[![NPM](https://nodei.co/npm-dl/plasmidjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/<plasmidjs>/)
-[![NPM](https://nodei.co/npm/plasmidjs.png?months=1&height=3)](https://nodei.co/npm/plasmidjs/)
+[![NPM](https://nodei.co/npm-dl/plasmidjs.png?height=3&months=1)](https://nodei.co/npm/<plasmidjs>/)
+[![NPM](https://nodei.co/npm/plasmidjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/plasmidjs/)
 
 Plasmidjs allows you to treat an object as a cell and each of its methods as genes allowing you to control which methods/genes are switched on, and what happens if an *switched-off* method is called.
 
