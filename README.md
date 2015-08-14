@@ -1,5 +1,5 @@
 # Plasmidjs
-
+[![NPM](https://nodei.co/npm-dl/plasmidjs.png)](https://nodei.co/npm/<plasmidjs>/) 
 Plasmidjs allows you to treat an object as a cell and each of its methods as genes allowing you to control which methods/genes are switched on, and what happens if an *switched-off* method is called.
 
 This is the child of synthetic biology and nodejs and was inspired by the author's experience at Cooper Union's Summer STEM iGem track as well as by [conduitjs](https://github.com/ifandelse/ConduitJS).
