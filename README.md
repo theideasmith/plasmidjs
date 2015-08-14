@@ -1,4 +1,6 @@
 # Plasmidjs
+[![NPM](https://nodei.co/npm-dl/plasmidjs.png)](https://nodei.co/npm/<plasmidjs>/) 
+[![NPM](https://nodei.co/npm/plasmidjs.png)](https://nodei.co/npm/plasmidjs/)
 
 Plasmidjs allows you to treat an object as a cell and each of its methods as genes allowing you to control which methods/genes are switched on, and what happens if an *switched-off* method is called.
 
